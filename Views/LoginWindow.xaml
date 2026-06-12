@@ -1,0 +1,50 @@
+<Window x:Class="MagazinWPF.Views.LoginWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Магазин — Вхід"
+        Height="540" Width="380"
+        WindowStartupLocation="CenterScreen"
+        ResizeMode="NoResize"
+        FontFamily="Segoe UI"
+        Background="{StaticResource BackgroundBrush}">
+
+    <Border Background="{StaticResource CardBrush}" CornerRadius="16" Margin="24" Padding="32"
+            BorderBrush="{StaticResource BorderBrush}" BorderThickness="1"
+            Effect="{StaticResource CardShadow}">
+
+        <StackPanel VerticalAlignment="Center">
+
+            <TextBlock Text="🛍" FontSize="32" HorizontalAlignment="Center" Margin="0,0,0,8"/>
+
+            <TextBlock Text="Магазин" FontSize="24" FontWeight="Bold"
+                       Foreground="{StaticResource PrimaryBrush}"
+                       HorizontalAlignment="Center" Margin="0,0,0,4"/>
+
+            <TextBlock Text="Вхід у систему" FontSize="13"
+                       Foreground="{StaticResource MutedTextBrush}"
+                       HorizontalAlignment="Center" Margin="0,0,0,24"/>
+
+            <TextBlock Text="Логін" FontSize="12" Foreground="{StaticResource MutedTextBrush}" Margin="0,0,0,4"/>
+            <TextBox x:Name="LoginTextBox" Margin="0,0,0,12"/>
+
+            <TextBlock Text="Пароль" FontSize="12" Foreground="{StaticResource MutedTextBrush}" Margin="0,0,0,4"/>
+            <PasswordBox x:Name="LoginPasswordBox" Margin="0,0,0,16"/>
+
+            <TextBlock Text="Роль" FontSize="12" Foreground="{StaticResource MutedTextBrush}" Margin="0,0,0,8"/>
+            <StackPanel Orientation="Horizontal" Margin="0,0,0,24">
+                <RadioButton x:Name="AdminRadio" Content="Адміністратор" GroupName="Role" Margin="0,0,20,0"/>
+                <RadioButton x:Name="CustomerRadio" Content="Покупець" GroupName="Role" IsChecked="True"/>
+            </StackPanel>
+
+            <Button Content="Увійти" Style="{StaticResource PrimaryButton}" Click="LoginButton_Click"/>
+
+            <TextBlock x:Name="ErrorTextBlock"
+                       Foreground="{StaticResource DangerBrush}"
+                       Margin="0,12,0,0"
+                       HorizontalAlignment="Center"
+                       TextWrapping="Wrap"
+                       Visibility="Collapsed"/>
+
+        </StackPanel>
+    </Border>
+</Window>

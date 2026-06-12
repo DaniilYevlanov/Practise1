@@ -3,20 +3,20 @@
   "WorkspaceRootPath": "C:\\Users\\topch\\source\\repos\\Practice\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{983499DA-7D72-4F57-B364-F06767D0AEE2}|Practice\\Practice.csproj|c:\\users\\topch\\source\\repos\\practice\\practice\\models.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{983499DA-7D72-4F57-B364-F06767D0AEE2}|Practice\\Practice.csproj|solutionrelative:practice\\models.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{88CBA8FA-318D-42FE-98D9-61D47246972E}|Practice\\Practice.csproj|c:\\users\\topch\\source\\repos\\practice\\practice\\models.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{88CBA8FA-318D-42FE-98D9-61D47246972E}|Practice\\Practice.csproj|solutionrelative:practice\\models.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{983499DA-7D72-4F57-B364-F06767D0AEE2}|Practice\\Practice.csproj|c:\\users\\topch\\source\\repos\\practice\\practice\\app.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}",
-      "RelativeMoniker": "D:0:0:{983499DA-7D72-4F57-B364-F06767D0AEE2}|Practice\\Practice.csproj|solutionrelative:practice\\app.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}"
+      "AbsoluteMoniker": "D:0:0:{88CBA8FA-318D-42FE-98D9-61D47246972E}|Practice\\Practice.csproj|c:\\users\\topch\\source\\repos\\practice\\practice\\app.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}",
+      "RelativeMoniker": "D:0:0:{88CBA8FA-318D-42FE-98D9-61D47246972E}|Practice\\Practice.csproj|solutionrelative:practice\\app.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{983499DA-7D72-4F57-B364-F06767D0AEE2}|Practice\\Practice.csproj|c:\\users\\topch\\source\\repos\\practice\\practice\\mainwindow.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}",
-      "RelativeMoniker": "D:0:0:{983499DA-7D72-4F57-B364-F06767D0AEE2}|Practice\\Practice.csproj|solutionrelative:practice\\mainwindow.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}"
+      "AbsoluteMoniker": "D:0:0:{88CBA8FA-318D-42FE-98D9-61D47246972E}|Practice\\Practice.csproj|c:\\users\\topch\\source\\repos\\practice\\practice\\mainwindow.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}",
+      "RelativeMoniker": "D:0:0:{88CBA8FA-318D-42FE-98D9-61D47246972E}|Practice\\Practice.csproj|solutionrelative:practice\\mainwindow.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{983499DA-7D72-4F57-B364-F06767D0AEE2}|Practice\\Practice.csproj|c:\\users\\topch\\source\\repos\\practice\\practice\\mainwindow.xaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{983499DA-7D72-4F57-B364-F06767D0AEE2}|Practice\\Practice.csproj|solutionrelative:practice\\mainwindow.xaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{88CBA8FA-318D-42FE-98D9-61D47246972E}|Practice\\Practice.csproj|c:\\users\\topch\\source\\repos\\practice\\practice\\mainwindow.xaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{88CBA8FA-318D-42FE-98D9-61D47246972E}|Practice\\Practice.csproj|solutionrelative:practice\\mainwindow.xaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     }
   ],
   "DocumentGroupContainers": [
@@ -36,7 +36,7 @@
               "RelativeDocumentMoniker": "Practice\\Models.cs",
               "ToolTip": "C:\\Users\\topch\\source\\repos\\Practice\\Practice\\Models.cs",
               "RelativeToolTip": "Practice\\Models.cs",
-              "ViewState": "AgIAAD4AAAAAAAAAAAA2wFYAAAABAAAAAAAAAA==",
+              "ViewState": "AgIAAD8AAAAAAAAAAAAUwFYAAAABAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2026-06-12T08:53:55.347Z",
               "EditorCaption": ""
@@ -50,8 +50,7 @@
               "ToolTip": "C:\\Users\\topch\\source\\repos\\Practice\\Practice\\App.xaml",
               "RelativeToolTip": "Practice\\App.xaml",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003549|",
-              "WhenOpened": "2026-06-12T08:49:09.916Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-06-12T08:49:09.916Z"
             },
             {
               "$type": "Document",
@@ -62,8 +61,7 @@
               "ToolTip": "C:\\Users\\topch\\source\\repos\\Practice\\Practice\\MainWindow.xaml",
               "RelativeToolTip": "Practice\\MainWindow.xaml",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003549|",
-              "WhenOpened": "2026-06-12T08:39:57.174Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-06-12T08:39:57.174Z"
             },
             {
               "$type": "Document",
@@ -75,8 +73,7 @@
               "RelativeToolTip": "Practice\\MainWindow.xaml.cs",
               "ViewState": "AgIAAMgAAAAAAAAAAAAwwOoAAAABAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-06-12T08:39:55.236Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-06-12T08:39:55.236Z"
             }
           ]
         }
