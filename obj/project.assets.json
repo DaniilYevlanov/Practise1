@@ -3335,19 +3335,24 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\topch\\.nuget\\packages\\": {}
+    "C:\\Users\\Acer\\.nuget\\packages\\": {},
+    "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\topch\\source\\repos\\Practice\\MagazinWPF.csproj",
+      "projectUniqueName": "D:\\c++\\Практика\\Practise1\\MagazinWPF.csproj",
       "projectName": "MagazinWPF",
-      "projectPath": "C:\\Users\\topch\\source\\repos\\Practice\\MagazinWPF.csproj",
-      "packagesPath": "C:\\Users\\topch\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\topch\\source\\repos\\Practice\\obj\\",
+      "projectPath": "D:\\c++\\Практика\\Practise1\\MagazinWPF.csproj",
+      "packagesPath": "C:\\Users\\Acer\\.nuget\\packages\\",
+      "outputPath": "D:\\c++\\Практика\\Practise1\\obj\\",
       "projectStyle": "PackageReference",
+      "fallbackFolders": [
+        "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
+      ],
       "configFilePaths": [
-        "C:\\Users\\topch\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Users\\Acer\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
       "originalTargetFrameworks": [
@@ -3411,7 +3416,7 @@
             "privateAssets": "none"
           }
         },
-        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\10.0.300/PortableRuntimeIdentifierGraph.json",
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\10.0.301/PortableRuntimeIdentifierGraph.json",
         "packagesToPrune": {
           "Microsoft.CSharp": "(,4.7.32767]",
           "Microsoft.VisualBasic": "(,10.4.32767]",

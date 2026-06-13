@@ -1,4 +1,6 @@
 using System.Windows;
+using System.Windows.Media;
+using MagazinWPF.Data;
 using MagazinWPF.Models;
 
 namespace MagazinWPF.Views
@@ -8,38 +10,166 @@ namespace MagazinWPF.Views
         public LoginWindow()
         {
             InitializeComponent();
+            EnsureDatabaseCreated();
         }
+
+        // ── Ініціалізація БД ─────────────────────────────────────────
+
+        private static void EnsureDatabaseCreated()
+        {
+            using var db = new StoreDbContext();
+            db.Database.EnsureCreated();
+        }
+
+        // ── Перемикання вкладок ──────────────────────────────────────
+
+        private void TabLogin_Click(object sender, RoutedEventArgs e)
+        {
+            LoginPanel.Visibility    = Visibility.Visible;
+            RegisterPanel.Visibility = Visibility.Collapsed;
+            HideMessage();
+
+            TabLoginButton.Background    = (Brush)FindResource("PrimaryBrush");
+            TabLoginButton.Foreground    = Brushes.White;
+            TabRegisterButton.Background = (Brush)FindResource("BackgroundBrush");
+            TabRegisterButton.Foreground = (Brush)FindResource("MutedTextBrush");
+        }
+
+        private void TabRegister_Click(object sender, RoutedEventArgs e)
+        {
+            LoginPanel.Visibility    = Visibility.Collapsed;
+            RegisterPanel.Visibility = Visibility.Visible;
+            HideMessage();
+
+            TabRegisterButton.Background = (Brush)FindResource("PrimaryBrush");
+            TabRegisterButton.Foreground = Brushes.White;
+            TabLoginButton.Background    = (Brush)FindResource("BackgroundBrush");
+            TabLoginButton.Foreground    = (Brush)FindResource("MutedTextBrush");
+        }
+
+        // ── Вхід ─────────────────────────────────────────────────────
 
         private void LoginButton_Click(object sender, RoutedEventArgs e)
         {
-            // TODO: команда бізнес-логіки додасть перевірку логіну/пароля
-            // через StoreDbContext (пошук користувача в базі та звірку пароля).
-            // Зараз роль обирається перемикачем вручну — це лише демонстрація
-            // поліморфізму (User -> Admin / Customer) та переходу між вікнами.
+            string login    = LoginTextBox.Text.Trim();
+            string password = LoginPasswordBox.Password;
 
-            if (string.IsNullOrWhiteSpace(LoginTextBox.Text))
+            if (string.IsNullOrWhiteSpace(login) || string.IsNullOrWhiteSpace(password))
             {
-                ErrorTextBlock.Text = "Введіть логін.";
-                ErrorTextBlock.Visibility = Visibility.Visible;
+                ShowError("Введіть логін і пароль.");
                 return;
             }
 
-            User currentUser = AdminRadio.IsChecked == true
-                ? new Admin { Login = LoginTextBox.Text, FullName = "Адміністратор" }
-                : new Customer { Login = LoginTextBox.Text, FullName = "Покупець" };
+            using var db = new StoreDbContext();
+            var account = db.Users.FirstOrDefault(u => u.Login == login && u.IsActive);
 
-            // Поліморфний виклик: для Admin і Customer виконається власна реалізація.
+            if (account == null || !account.VerifyPassword(password))
+            {
+                ShowError("Невірний логін або пароль.");
+                return;
+            }
+
+            User currentUser = account.ToUser();
             currentUser.ShowMenu();
 
             Window nextWindow = currentUser switch
             {
-                Admin admin => new AdminWindow(admin),
+                Admin    admin    => new AdminWindow(admin),
                 Customer customer => new MainWindow(customer),
-                _ => new MainWindow(currentUser)
+                _                => new MainWindow(currentUser)
             };
 
             nextWindow.Show();
             Close();
+        }
+
+        // ── Реєстрація ───────────────────────────────────────────────
+
+        private void RegisterButton_Click(object sender, RoutedEventArgs e)
+        {
+            string fullName        = RegFullNameTextBox.Text.Trim();
+            string login           = RegLoginTextBox.Text.Trim();
+            string password        = RegPasswordBox.Password;
+            string confirmPassword = RegConfirmPasswordBox.Password;
+
+            // Валідація
+            if (string.IsNullOrWhiteSpace(fullName) ||
+                string.IsNullOrWhiteSpace(login)    ||
+                string.IsNullOrWhiteSpace(password))
+            {
+                ShowError("Заповніть усі поля.");
+                return;
+            }
+
+            if (login.Length < 3)
+            {
+                ShowError("Логін має містити мінімум 3 символи.");
+                return;
+            }
+
+            if (password.Length < 6)
+            {
+                ShowError("Пароль має містити мінімум 6 символів.");
+                return;
+            }
+
+            if (password != confirmPassword)
+            {
+                ShowError("Паролі не збігаються.");
+                return;
+            }
+
+            using var db = new StoreDbContext();
+
+            if (db.Users.Any(u => u.Login == login))
+            {
+                ShowError("Користувач із таким логіном вже існує.");
+                return;
+            }
+
+            var newAccount = new UserAccount
+            {
+                Login        = login,
+                PasswordHash = UserAccount.HashPassword(password),
+                FullName     = fullName,
+                Role         = "Customer",
+                IsActive     = true,
+                CreatedAt    = DateTime.Now
+            };
+
+            db.Users.Add(newAccount);
+            db.SaveChanges();
+
+            // Очищуємо форму та переходимо на вкладку входу
+            RegFullNameTextBox.Text  = string.Empty;
+            RegLoginTextBox.Text     = string.Empty;
+            RegPasswordBox.Password  = string.Empty;
+            RegConfirmPasswordBox.Password = string.Empty;
+
+            ShowSuccess("Реєстрацію успішно завершено! Тепер увійдіть.");
+            TabLogin_Click(sender, e);
+            LoginTextBox.Text = login;
+        }
+
+        // ── Допоміжні методи ─────────────────────────────────────────
+
+        private void ShowError(string message)
+        {
+            MessageTextBlock.Text       = message;
+            MessageTextBlock.Foreground = (Brush)FindResource("DangerBrush");
+            MessageTextBlock.Visibility = Visibility.Visible;
+        }
+
+        private void ShowSuccess(string message)
+        {
+            MessageTextBlock.Text       = message;
+            MessageTextBlock.Foreground = (Brush)FindResource("PrimaryBrush");
+            MessageTextBlock.Visibility = Visibility.Visible;
+        }
+
+        private void HideMessage()
+        {
+            MessageTextBlock.Visibility = Visibility.Collapsed;
         }
     }
 }

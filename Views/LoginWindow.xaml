@@ -2,7 +2,7 @@
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         Title="Магазин — Вхід"
-        Height="540" Width="380"
+        Height="700" Width="420"
         WindowStartupLocation="CenterScreen"
         ResizeMode="NoResize"
         FontFamily="Segoe UI"
@@ -12,37 +12,88 @@
             BorderBrush="{StaticResource BorderBrush}" BorderThickness="1"
             Effect="{StaticResource CardShadow}">
 
-        <StackPanel VerticalAlignment="Center">
+        <StackPanel>
 
+            <!-- Логотип -->
             <TextBlock Text="🛍" FontSize="32" HorizontalAlignment="Center" Margin="0,0,0,8"/>
-
             <TextBlock Text="Магазин" FontSize="24" FontWeight="Bold"
                        Foreground="{StaticResource PrimaryBrush}"
                        HorizontalAlignment="Center" Margin="0,0,0,4"/>
 
-            <TextBlock Text="Вхід у систему" FontSize="13"
-                       Foreground="{StaticResource MutedTextBrush}"
-                       HorizontalAlignment="Center" Margin="0,0,0,24"/>
+            <!-- Вкладки Вхід / Реєстрація -->
+            <Grid Margin="0,16,0,24">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
 
-            <TextBlock Text="Логін" FontSize="12" Foreground="{StaticResource MutedTextBrush}" Margin="0,0,0,4"/>
-            <TextBox x:Name="LoginTextBox" Margin="0,0,0,12"/>
+                <Button x:Name="TabLoginButton" Grid.Column="0" Content="Вхід"
+                        Click="TabLogin_Click">
+                    <Button.Style>
+                        <Style TargetType="Button" BasedOn="{StaticResource PrimaryButton}">
+                            <Setter Property="Background" Value="{StaticResource PrimaryBrush}"/>
+                            <Setter Property="Foreground" Value="White"/>
+                        </Style>
+                    </Button.Style>
+                </Button>
 
-            <TextBlock Text="Пароль" FontSize="12" Foreground="{StaticResource MutedTextBrush}" Margin="0,0,0,4"/>
-            <PasswordBox x:Name="LoginPasswordBox" Margin="0,0,0,16"/>
+                <Button x:Name="TabRegisterButton" Grid.Column="1" Content="Реєстрація"
+                        Click="TabRegister_Click">
+                    <Button.Style>
+                        <Style TargetType="Button" BasedOn="{StaticResource SecondaryButton}">
+                            <Setter Property="Background" Value="#F1F3F5"/>
+                            <Setter Property="Foreground" Value="{StaticResource MutedTextBrush}"/>
+                        </Style>
+                    </Button.Style>
+                </Button>
+            </Grid>
 
-            <TextBlock Text="Роль" FontSize="12" Foreground="{StaticResource MutedTextBrush}" Margin="0,0,0,8"/>
-            <StackPanel Orientation="Horizontal" Margin="0,0,0,24">
-                <RadioButton x:Name="AdminRadio" Content="Адміністратор" GroupName="Role" Margin="0,0,20,0"/>
-                <RadioButton x:Name="CustomerRadio" Content="Покупець" GroupName="Role" IsChecked="True"/>
+            <!-- ═══ Панель входу ═══ -->
+            <StackPanel x:Name="LoginPanel">
+
+                <TextBlock Text="Логін" FontSize="12"
+                           Foreground="{StaticResource MutedTextBrush}" Margin="0,0,0,4"/>
+                <TextBox x:Name="LoginTextBox" Margin="0,0,0,12"/>
+
+                <TextBlock Text="Пароль" FontSize="12"
+                           Foreground="{StaticResource MutedTextBrush}" Margin="0,0,0,4"/>
+                <PasswordBox x:Name="LoginPasswordBox" Margin="0,0,0,24"/>
+
+                <Button Content="Увійти" Style="{StaticResource PrimaryButton}"
+                        Click="LoginButton_Click"/>
+
             </StackPanel>
 
-            <Button Content="Увійти" Style="{StaticResource PrimaryButton}" Click="LoginButton_Click"/>
+            <!-- ═══ Панель реєстрації ═══ -->
+            <StackPanel x:Name="RegisterPanel" Visibility="Collapsed">
 
-            <TextBlock x:Name="ErrorTextBlock"
-                       Foreground="{StaticResource DangerBrush}"
-                       Margin="0,12,0,0"
+                <TextBlock Text="Повне ім'я" FontSize="12"
+                           Foreground="{StaticResource MutedTextBrush}" Margin="0,0,0,4"/>
+                <TextBox x:Name="RegFullNameTextBox" Margin="0,0,0,12"/>
+
+                <TextBlock Text="Логін" FontSize="12"
+                           Foreground="{StaticResource MutedTextBrush}" Margin="0,0,0,4"/>
+                <TextBox x:Name="RegLoginTextBox" Margin="0,0,0,12"/>
+
+                <TextBlock Text="Пароль" FontSize="12"
+                           Foreground="{StaticResource MutedTextBrush}" Margin="0,0,0,4"/>
+                <PasswordBox x:Name="RegPasswordBox" Margin="0,0,0,12"/>
+
+                <TextBlock Text="Підтвердження пароля" FontSize="12"
+                           Foreground="{StaticResource MutedTextBrush}" Margin="0,0,0,4"/>
+                <PasswordBox x:Name="RegConfirmPasswordBox" Margin="0,0,0,24"/>
+
+                <Button Content="Зареєструватися" Style="{StaticResource PrimaryButton}"
+                        Click="RegisterButton_Click"/>
+
+            </StackPanel>
+
+            <!-- Повідомлення про помилку / успіх -->
+            <TextBlock x:Name="MessageTextBlock"
+                       Margin="0,14,0,0"
                        HorizontalAlignment="Center"
                        TextWrapping="Wrap"
+                       TextAlignment="Center"
                        Visibility="Collapsed"/>
 
         </StackPanel>

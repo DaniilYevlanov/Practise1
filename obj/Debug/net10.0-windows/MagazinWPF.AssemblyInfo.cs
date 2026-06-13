@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("MagazinWPF")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+ae99a08a8c965e7fcf6666fd5af947204e8fe91a")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+e5346eee0ea94f0a31ce87d2d7fa42c39a23b699")]
 [assembly: System.Reflection.AssemblyProductAttribute("MagazinWPF")]
 [assembly: System.Reflection.AssemblyTitleAttribute("MagazinWPF")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
