@@ -1,13 +1,25 @@
 {
   "Version": 1,
-  "WorkspaceRootPath": "D:\\c\u002B\u002B\\\u041F\u0440\u0430\u043A\u0442\u0438\u043A\u0430\\Practise1\\",
+  "WorkspaceRootPath": "D:\\Visual Studio\\OOP\\\u041F\u0440\u0430\u043A\u0442\u0438\u043A\u0430\\Practise1\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{7D016EE0-AA69-42F4-A8BA-A31D99E10964}|MagazinWPF.csproj|d:\\c\u002B\u002B\\\u043F\u0440\u0430\u043A\u0442\u0438\u043A\u0430\\practise1\\views\\loginwindow.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}",
+      "AbsoluteMoniker": "D:0:0:{7D016EE0-AA69-42F4-A8BA-A31D99E10964}|MagazinWPF.csproj|d:\\visual studio\\oop\\\u043F\u0440\u0430\u043A\u0442\u0438\u043A\u0430\\practise1\\views\\mainwindow.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}",
+      "RelativeMoniker": "D:0:0:{7D016EE0-AA69-42F4-A8BA-A31D99E10964}|MagazinWPF.csproj|solutionrelative:views\\mainwindow.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{7D016EE0-AA69-42F4-A8BA-A31D99E10964}|MagazinWPF.csproj|d:\\visual studio\\oop\\\u043F\u0440\u0430\u043A\u0442\u0438\u043A\u0430\\practise1\\views\\mainwindow.xaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{7D016EE0-AA69-42F4-A8BA-A31D99E10964}|MagazinWPF.csproj|solutionrelative:views\\mainwindow.xaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{7D016EE0-AA69-42F4-A8BA-A31D99E10964}|MagazinWPF.csproj|d:\\visual studio\\oop\\\u043F\u0440\u0430\u043A\u0442\u0438\u043A\u0430\\practise1\\data\\storedbcontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{7D016EE0-AA69-42F4-A8BA-A31D99E10964}|MagazinWPF.csproj|solutionrelative:data\\storedbcontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{7D016EE0-AA69-42F4-A8BA-A31D99E10964}|MagazinWPF.csproj|d:\\visual studio\\oop\\\u043F\u0440\u0430\u043A\u0442\u0438\u043A\u0430\\practise1\\views\\loginwindow.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}",
       "RelativeMoniker": "D:0:0:{7D016EE0-AA69-42F4-A8BA-A31D99E10964}|MagazinWPF.csproj|solutionrelative:views\\loginwindow.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{7D016EE0-AA69-42F4-A8BA-A31D99E10964}|MagazinWPF.csproj|d:\\c\u002B\u002B\\\u043F\u0440\u0430\u043A\u0442\u0438\u043A\u0430\\practise1\\models\\cart.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "AbsoluteMoniker": "D:0:0:{7D016EE0-AA69-42F4-A8BA-A31D99E10964}|MagazinWPF.csproj|d:\\visual studio\\oop\\\u043F\u0440\u0430\u043A\u0442\u0438\u043A\u0430\\practise1\\models\\cart.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{7D016EE0-AA69-42F4-A8BA-A31D99E10964}|MagazinWPF.csproj|solutionrelative:models\\cart.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     }
   ],
@@ -18,15 +30,53 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 0,
+          "SelectedChildIndex": 1,
           "Children": [
             {
               "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "StoreDbContext.cs",
+              "DocumentMoniker": "D:\\Visual Studio\\OOP\\\u041F\u0440\u0430\u043A\u0442\u0438\u043A\u0430\\Practise1\\Data\\StoreDbContext.cs",
+              "RelativeDocumentMoniker": "Data\\StoreDbContext.cs",
+              "ToolTip": "D:\\Visual Studio\\OOP\\\u041F\u0440\u0430\u043A\u0442\u0438\u043A\u0430\\Practise1\\Data\\StoreDbContext.cs",
+              "RelativeToolTip": "Data\\StoreDbContext.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAA8AAABVAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-06-13T19:29:40.557Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
               "DocumentIndex": 0,
+              "Title": "MainWindow.xaml",
+              "DocumentMoniker": "D:\\Visual Studio\\OOP\\\u041F\u0440\u0430\u043A\u0442\u0438\u043A\u0430\\Practise1\\Views\\MainWindow.xaml",
+              "RelativeDocumentMoniker": "Views\\MainWindow.xaml",
+              "ToolTip": "D:\\Visual Studio\\OOP\\\u041F\u0440\u0430\u043A\u0442\u0438\u043A\u0430\\Practise1\\Views\\MainWindow.xaml",
+              "RelativeToolTip": "Views\\MainWindow.xaml",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003549|",
+              "WhenOpened": "2026-06-13T19:23:53.165Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "MainWindow.xaml.cs",
+              "DocumentMoniker": "D:\\Visual Studio\\OOP\\\u041F\u0440\u0430\u043A\u0442\u0438\u043A\u0430\\Practise1\\Views\\MainWindow.xaml.cs",
+              "RelativeDocumentMoniker": "Views\\MainWindow.xaml.cs",
+              "ToolTip": "D:\\Visual Studio\\OOP\\\u041F\u0440\u0430\u043A\u0442\u0438\u043A\u0430\\Practise1\\Views\\MainWindow.xaml.cs",
+              "RelativeToolTip": "Views\\MainWindow.xaml.cs",
+              "ViewState": "AgIAADUAAAAAAAAAAAAuwO8AAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-06-13T19:09:07.584Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
               "Title": "LoginWindow.xaml",
-              "DocumentMoniker": "D:\\c\u002B\u002B\\\u041F\u0440\u0430\u043A\u0442\u0438\u043A\u0430\\Practise1\\Views\\LoginWindow.xaml",
+              "DocumentMoniker": "D:\\Visual Studio\\OOP\\\u041F\u0440\u0430\u043A\u0442\u0438\u043A\u0430\\Practise1\\Views\\LoginWindow.xaml",
               "RelativeDocumentMoniker": "Views\\LoginWindow.xaml",
-              "ToolTip": "D:\\c\u002B\u002B\\\u041F\u0440\u0430\u043A\u0442\u0438\u043A\u0430\\Practise1\\Views\\LoginWindow.xaml",
+              "ToolTip": "D:\\Visual Studio\\OOP\\\u041F\u0440\u0430\u043A\u0442\u0438\u043A\u0430\\Practise1\\Views\\LoginWindow.xaml",
               "RelativeToolTip": "Views\\LoginWindow.xaml",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003549|",
               "WhenOpened": "2026-06-13T14:37:05.462Z",
@@ -34,16 +84,15 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 1,
+              "DocumentIndex": 4,
               "Title": "Cart.cs",
-              "DocumentMoniker": "D:\\c\u002B\u002B\\\u041F\u0440\u0430\u043A\u0442\u0438\u043A\u0430\\Practise1\\Models\\Cart.cs",
+              "DocumentMoniker": "D:\\Visual Studio\\OOP\\\u041F\u0440\u0430\u043A\u0442\u0438\u043A\u0430\\Practise1\\Models\\Cart.cs",
               "RelativeDocumentMoniker": "Models\\Cart.cs",
-              "ToolTip": "D:\\c\u002B\u002B\\\u041F\u0440\u0430\u043A\u0442\u0438\u043A\u0430\\Practise1\\Models\\Cart.cs",
+              "ToolTip": "D:\\Visual Studio\\OOP\\\u041F\u0440\u0430\u043A\u0442\u0438\u043A\u0430\\Practise1\\Models\\Cart.cs",
               "RelativeToolTip": "Models\\Cart.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAA8AAAAVAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-06-12T20:19:52.678Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-06-12T20:19:52.678Z"
             }
           ]
         }

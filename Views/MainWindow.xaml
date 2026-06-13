@@ -71,10 +71,8 @@
                             </Style>
                         </ListBox.ItemContainerStyle>
 
-                        <ListBoxItem Content="Усі товари" IsSelected="True"/>
-                        <ListBoxItem Content="Смартфони"/>
-                        <ListBoxItem Content="Ноутбуки"/>
-                        <ListBoxItem Content="Периферія"/>
+                        <!-- Тільки цей пункт статичний, решта додається з БД у коді -->
+                        <ListBoxItem Content="Усі товари" IsSelected="True" Tag="{x:Null}"/>
                     </ListBox>
                 </StackPanel>
             </Border>
@@ -109,12 +107,19 @@
                                             <TextBlock Text="{Binding Name}" FontWeight="SemiBold" FontSize="13"
                                                        TextWrapping="Wrap" Margin="0,0,0,6" MinHeight="36"/>
 
-                                            <StackPanel Orientation="Horizontal" Margin="0,0,0,10">
+                                            <StackPanel Orientation="Horizontal" Margin="0,0,0,4">
                                                 <TextBlock Text="{Binding Price, StringFormat=N0}"
                                                            Foreground="{StaticResource PrimaryBrush}" FontWeight="Bold" FontSize="15"/>
                                                 <TextBlock Text=" грн"
                                                            Foreground="{StaticResource PrimaryBrush}" FontWeight="Bold" FontSize="15"/>
                                             </StackPanel>
+
+                                            <TextBlock Margin="0,0,0,10" FontSize="11"
+                                                       Foreground="{StaticResource MutedTextBrush}">
+                                                <Run Text="В наявності: "/>
+                                                <Run Text="{Binding Stock}"/>
+                                                <Run Text=" шт."/>
+                                            </TextBlock>
 
                                             <Button Content="Купити" Style="{StaticResource PrimaryButton}"
                                                     Tag="{Binding}" Click="AddToCart_Click"/>
@@ -177,7 +182,7 @@
 
                     <TextBlock Grid.Row="2" x:Name="EmptyCartTextBlock" Text="Кошик порожній"
                                Foreground="{StaticResource MutedTextBrush}" HorizontalAlignment="Center"
-                               Margin="0,8" Visibility="Collapsed"/>
+                               Margin="0,8" Visibility="Visible"/>
 
                     <StackPanel Grid.Row="3" Margin="0,12,0,0">
                         <Separator Margin="0,0,0,12"/>
