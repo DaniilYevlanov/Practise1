@@ -46,7 +46,7 @@ namespace MagazinWPF {
         /// InitializeComponent
         /// </summary>
         [System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [System.CodeDom.Compiler.GeneratedCodeAttribute("PresentationBuildTasks", "10.0.9.0")]
+        [System.CodeDom.Compiler.GeneratedCodeAttribute("PresentationBuildTasks", "10.0.8.0")]
         public void InitializeComponent() {
             if (_contentLoaded) {
                 return;
@@ -58,7 +58,7 @@ namespace MagazinWPF {
             
             #line default
             #line hidden
-            System.Uri resourceLocater = new System.Uri("/MagazinWPF;component/app.xaml", System.UriKind.Relative);
+            System.Uri resourceLocater = new System.Uri("/MagazinWPF;V1.0.0.0;component/app.xaml", System.UriKind.Relative);
             
             #line 1 "..\..\..\App.xaml"
             System.Windows.Application.LoadComponent(this, resourceLocater);
@@ -72,7 +72,7 @@ namespace MagazinWPF {
         /// </summary>
         [System.STAThreadAttribute()]
         [System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [System.CodeDom.Compiler.GeneratedCodeAttribute("PresentationBuildTasks", "10.0.9.0")]
+        [System.CodeDom.Compiler.GeneratedCodeAttribute("PresentationBuildTasks", "10.0.8.0")]
         public static void Main() {
             MagazinWPF.App app = new MagazinWPF.App();
             app.InitializeComponent();

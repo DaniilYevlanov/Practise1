@@ -1,24 +1,20 @@
 {
   "format": 1,
   "restore": {
-    "D:\\c++\\Практика\\Practise1\\MagazinWPF.csproj": {}
+    "C:\\Users\\topch\\source\\repos\\Practice\\MagazinWPF.csproj": {}
   },
   "projects": {
-    "D:\\c++\\Практика\\Practise1\\MagazinWPF.csproj": {
+    "C:\\Users\\topch\\source\\repos\\Practice\\MagazinWPF.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "D:\\c++\\Практика\\Practise1\\MagazinWPF.csproj",
+        "projectUniqueName": "C:\\Users\\topch\\source\\repos\\Practice\\MagazinWPF.csproj",
         "projectName": "MagazinWPF",
-        "projectPath": "D:\\c++\\Практика\\Practise1\\MagazinWPF.csproj",
-        "packagesPath": "C:\\Users\\Acer\\.nuget\\packages\\",
-        "outputPath": "D:\\c++\\Практика\\Practise1\\obj\\",
+        "projectPath": "C:\\Users\\topch\\source\\repos\\Practice\\MagazinWPF.csproj",
+        "packagesPath": "C:\\Users\\topch\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\topch\\source\\repos\\Practice\\obj\\",
         "projectStyle": "PackageReference",
-        "fallbackFolders": [
-          "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
-        ],
         "configFilePaths": [
-          "C:\\Users\\Acer\\AppData\\Roaming\\NuGet\\NuGet.Config",
-          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
+          "C:\\Users\\topch\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
@@ -82,7 +78,7 @@
               "privateAssets": "none"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\10.0.301/PortableRuntimeIdentifierGraph.json",
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\10.0.300/PortableRuntimeIdentifierGraph.json",
           "packagesToPrune": {
             "Microsoft.CSharp": "(,4.7.32767]",
             "Microsoft.VisualBasic": "(,10.4.32767]",

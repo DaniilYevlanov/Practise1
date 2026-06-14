@@ -352,3 +352,8 @@ D:\c++\Практика\Practise1\obj\Debug\net10.0-windows\refint\MagazinWPF.dl
 D:\c++\Практика\Practise1\obj\Debug\net10.0-windows\MagazinWPF.pdb
 D:\c++\Практика\Practise1\obj\Debug\net10.0-windows\MagazinWPF.genruntimeconfig.cache
 D:\c++\Практика\Practise1\obj\Debug\net10.0-windows\ref\MagazinWPF.dll
+C:\Users\topch\source\repos\Practice\obj\Debug\net10.0-windows\MagazinWPF.sourcelink.json
+C:\Users\topch\source\repos\Practice\obj\Debug\net10.0-windows\Views\CategoryEditWindow.baml
+C:\Users\topch\source\repos\Practice\obj\Debug\net10.0-windows\Views\ProductEditWindow.baml
+C:\Users\topch\source\repos\Practice\obj\Debug\net10.0-windows\Views\CategoryEditWindow.g.cs
+C:\Users\topch\source\repos\Practice\obj\Debug\net10.0-windows\Views\ProductEditWindow.g.cs
