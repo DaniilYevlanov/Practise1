@@ -13,7 +13,6 @@
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
 
-        <!-- Верхня панель -->
         <Border Grid.Row="0" Background="{StaticResource PrimaryBrush}" Padding="24,16">
             <Grid>
                 <StackPanel Orientation="Horizontal">
@@ -31,7 +30,6 @@
             </Grid>
         </Border>
 
-        <!-- Основна область -->
         <Grid Grid.Row="1" Margin="24">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="200"/>
@@ -39,7 +37,6 @@
                 <ColumnDefinition Width="300"/>
             </Grid.ColumnDefinitions>
 
-            <!-- Категорії -->
             <Border Grid.Column="0" Style="{StaticResource ItemCardStyle}" Margin="0,0,16,0" VerticalAlignment="Top">
                 <StackPanel>
                     <TextBlock Text="Категорії" Style="{StaticResource SectionHeader}"/>
@@ -70,14 +67,10 @@
                                 </Setter>
                             </Style>
                         </ListBox.ItemContainerStyle>
-
-                        <!-- Тільки цей пункт статичний, решта додається з БД у коді -->
-                        <ListBoxItem Content="Усі товари" IsSelected="True" Tag="{x:Null}"/>
                     </ListBox>
                 </StackPanel>
             </Border>
 
-            <!-- Товари -->
             <Border Grid.Column="1" Style="{StaticResource ItemCardStyle}" Margin="0,0,16,0">
                 <Grid>
                     <Grid.RowDefinitions>
@@ -132,7 +125,6 @@
                 </Grid>
             </Border>
 
-            <!-- Кошик -->
             <Border Grid.Column="2" Style="{StaticResource ItemCardStyle}">
                 <Grid>
                     <Grid.RowDefinitions>
