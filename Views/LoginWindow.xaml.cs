@@ -1,3 +1,5 @@
+using System;
+using System.Linq;
 using System.Windows;
 using System.Windows.Media;
 using MagazinWPF.Data;
@@ -13,15 +15,11 @@ namespace MagazinWPF.Views
             EnsureDatabaseCreated();
         }
 
-        // ── Ініціалізація БД ─────────────────────────────────────────
-
         private static void EnsureDatabaseCreated()
         {
             using var db = new StoreDbContext();
             db.Database.EnsureCreated();
         }
-
-        // ── Перемикання вкладок ──────────────────────────────────────
 
         private void TabLogin_Click(object sender, RoutedEventArgs e)
         {
@@ -46,8 +44,6 @@ namespace MagazinWPF.Views
             TabLoginButton.Background    = (Brush)FindResource("BackgroundBrush");
             TabLoginButton.Foreground    = (Brush)FindResource("MutedTextBrush");
         }
-
-        // ── Вхід ─────────────────────────────────────────────────────
 
         private void LoginButton_Click(object sender, RoutedEventArgs e)
         {
@@ -83,8 +79,6 @@ namespace MagazinWPF.Views
             Close();
         }
 
-        // ── Реєстрація ───────────────────────────────────────────────
-
         private void RegisterButton_Click(object sender, RoutedEventArgs e)
         {
             string fullName        = RegFullNameTextBox.Text.Trim();
@@ -92,7 +86,6 @@ namespace MagazinWPF.Views
             string password        = RegPasswordBox.Password;
             string confirmPassword = RegConfirmPasswordBox.Password;
 
-            // Валідація
             if (string.IsNullOrWhiteSpace(fullName) ||
                 string.IsNullOrWhiteSpace(login)    ||
                 string.IsNullOrWhiteSpace(password))
@@ -140,7 +133,6 @@ namespace MagazinWPF.Views
             db.Users.Add(newAccount);
             db.SaveChanges();
 
-            // Очищуємо форму та переходимо на вкладку входу
             RegFullNameTextBox.Text  = string.Empty;
             RegLoginTextBox.Text     = string.Empty;
             RegPasswordBox.Password  = string.Empty;
@@ -150,8 +142,6 @@ namespace MagazinWPF.Views
             TabLogin_Click(sender, e);
             LoginTextBox.Text = login;
         }
-
-        // ── Допоміжні методи ─────────────────────────────────────────
 
         private void ShowError(string message)
         {

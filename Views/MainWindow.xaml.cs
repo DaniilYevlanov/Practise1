@@ -1,24 +1,30 @@
+using System;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using MagazinWPF.Models;
+using MagazinWPF.Services;
 
 namespace MagazinWPF.Views
 {
     /// <summary>
     /// Вікно покупця: каталог товарів, категорії та кошик.
-    /// Наразі реалізовано лише зовнішній вигляд та найпростішу взаємодію елементів —
-    /// реальну роботу з базою даних (EF Core / SQLite) та правила (Services)
-    /// додасть команда бізнес-логіки.
+    /// Дані товарів і категорій надходять через сервіси та синхронізуються з адмін-панеллю.
     /// </summary>
     public partial class MainWindow : Window
     {
         private readonly User _currentUser;
 
-        public ObservableCollection<Product> Products { get; } = new();
+        private readonly ProductService _productService = new();
+        private readonly CategoryService _categoryService = new();
 
+        private int? _selectedCategoryId;
+
+        public ObservableCollection<Product> Products { get; } = new();
         public ObservableCollection<CartItem> CartItems { get; } = new();
+
+        public ObservableCollection<CategoryFilterItem> CategoryFilters { get; } = new();
 
         public MainWindow(User currentUser)
         {
@@ -27,81 +33,153 @@ namespace MagazinWPF.Views
             _currentUser = currentUser;
             UserNameTextBlock.Text = $"{currentUser.FullName} ({currentUser.Role})";
 
-            // Демонстраційні дані для зовнішнього вигляду.
-            // TODO: команда замінить це на завантаження категорій і товарів
-            // з бази даних через StoreDbContext / ProductService.
-            LoadDemoProducts();
-
             ProductsItemsControl.ItemsSource = Products;
             CartItemsControl.ItemsSource = CartItems;
+
+            CategoriesListBox.ItemsSource = CategoryFilters;
+            CategoriesListBox.DisplayMemberPath = "Name";
+
+            LoadCategories();
+            LoadProducts();
             RefreshCart();
+
+            DataEvents.ProductsChanged += OnProductsChanged;
+            DataEvents.CategoriesChanged += OnCategoriesChanged;
+            Closed += MainWindow_Closed;
         }
 
-        private void LoadDemoProducts()
+        private void MainWindow_Closed(object? sender, EventArgs e)
         {
-            Products.Add(new Product { Id = 1, Name = "Samsung A26", Price = 9899, Stock = 10, CategoryId = 1 });
-            Products.Add(new Product { Id = 2, Name = "Xiaomi 15", Price = 36999, Stock = 4, CategoryId = 1 });
-            Products.Add(new Product { Id = 3, Name = "Lenovo ThinkPad", Price = 35000, Stock = 5, CategoryId = 2 });
-            Products.Add(new Product { Id = 4, Name = "Asus Vivobook", Price = 28000, Stock = 7, CategoryId = 2 });
-            Products.Add(new Product { Id = 5, Name = "Logitech Mouse", Price = 800, Stock = 20, CategoryId = 3 });
-            Products.Add(new Product { Id = 6, Name = "Proove Gaming", Price = 1099, Stock = 15, CategoryId = 3 });
+            DataEvents.ProductsChanged -= OnProductsChanged;
+            DataEvents.CategoriesChanged -= OnCategoriesChanged;
         }
+
+        private void OnProductsChanged()
+        {
+            Dispatcher.Invoke(LoadProducts);
+        }
+
+        private void OnCategoriesChanged()
+        {
+            Dispatcher.Invoke(() =>
+            {
+                LoadCategories();
+                LoadProducts();
+            });
+        }
+
+        // ── Завантаження даних ───────────────────────────────────────
+
+        private void LoadCategories()
+        {
+            int? previouslySelected = _selectedCategoryId;
+
+            CategoryFilters.Clear();
+            CategoryFilters.Add(new CategoryFilterItem(null, "Усі товари"));
+
+            foreach (var category in _categoryService.GetAll().Where(c => c.IsActive))
+            {
+                CategoryFilters.Add(new CategoryFilterItem(category.Id, category.Name));
+            }
+
+            var match = CategoryFilters.FirstOrDefault(c => c.Id == previouslySelected);
+            CategoriesListBox.SelectedItem = match ?? CategoryFilters[0];
+        }
+
+        private void LoadProducts()
+        {
+            Products.Clear();
+
+            var items = _selectedCategoryId == null
+                ? _productService.GetAll()
+                : _productService.GetByCategory(_selectedCategoryId.Value);
+
+            foreach (var product in items.Where(p => p.IsAvailable))
+            {
+                Products.Add(product);
+            }
+        }
+
+        // ── Фільтрація за категорією ──────────────────────────────────
 
         private void CategoriesListBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            // TODO: команда реалізує фільтрацію товарів за обраною категорією
-            // (наприклад, через ProductService.GetByCategory(categoryId)).
+            if (CategoriesListBox.SelectedItem is CategoryFilterItem item)
+            {
+                _selectedCategoryId = item.Id;
+                LoadProducts();
+            }
         }
+
+        // ── Кошик ─────────────────────────────────────────────────────
 
         private void AddToCart_Click(object sender, RoutedEventArgs e)
         {
-            // Проста локальна логіка лише для того, щоб кошик виглядав "живим".
-            // TODO: команда замінить на CartService.AddProduct(...) з перевіркою
-            // залишку товару (Stock) та збереженням у базу.
-            if (sender is Button button && button.Tag is Product product)
+            if (sender is not Button button || button.Tag is not Product product)
+                return;
+
+            var existing = CartItems.FirstOrDefault(i => i.Product?.Id == product.Id);
+            int currentQuantity = existing?.Quantity ?? 0;
+
+            if (currentQuantity + 1 > product.Stock)
             {
-                var existing = CartItems.FirstOrDefault(i => i.Product?.Id == product.Id);
-
-                if (existing != null)
-                {
-                    existing.Quantity++;
-                }
-                else
-                {
-                    CartItems.Add(new CartItem
-                    {
-                        Product = product,
-                        Quantity = 1,
-                        UnitPrice = product.Price
-                    });
-                }
-
-                RefreshCart();
+                MessageBox.Show(
+                    $"У наявності лише {product.Stock} шт. товару «{product.Name}».",
+                    "Недостатньо товару",
+                    MessageBoxButton.OK,
+                    MessageBoxImage.Warning);
+                return;
             }
+
+            if (existing != null)
+            {
+                existing.Quantity++;
+            }
+            else
+            {
+                CartItems.Add(new CartItem
+                {
+                    Product = product,
+                    Quantity = 1,
+                    UnitPrice = product.Price
+                });
+            }
+
+            RefreshCart();
         }
 
         private void IncreaseQuantity_Click(object sender, RoutedEventArgs e)
         {
-            if (sender is Button button && button.Tag is CartItem item)
+            if (sender is not Button button || button.Tag is not CartItem item)
+                return;
+
+            int stock = item.Product?.Stock ?? 0;
+
+            if (item.Quantity >= stock)
             {
-                item.Quantity++;
-                RefreshCart();
+                MessageBox.Show(
+                    $"У наявності лише {stock} шт. товару «{item.Product?.Name}».",
+                    "Недостатньо товару",
+                    MessageBoxButton.OK,
+                    MessageBoxImage.Warning);
+                return;
             }
+
+            item.Quantity++;
+            RefreshCart();
         }
 
         private void DecreaseQuantity_Click(object sender, RoutedEventArgs e)
         {
-            if (sender is Button button && button.Tag is CartItem item)
-            {
-                item.Quantity--;
+            if (sender is not Button button || button.Tag is not CartItem item)
+                return;
 
-                if (item.Quantity <= 0)
-                {
-                    CartItems.Remove(item);
-                }
+            item.Quantity--;
 
-                RefreshCart();
-            }
+            if (item.Quantity <= 0)
+                CartItems.Remove(item);
+
+            RefreshCart();
         }
 
         private void RefreshCart()
@@ -116,17 +194,62 @@ namespace MagazinWPF.Views
             TotalAmountTextBlock.Text = $"{total:N0}";
         }
 
+        // ── Оформлення замовлення ──────────────────────────────────────
+
         private void Checkout_Click(object sender, RoutedEventArgs e)
         {
-            // TODO: команда реалізує SaleService.CreateSale(...) —
-            // створення Sale/SaleItem, зменшення Stock товарів,
-            // збереження через EF Core у SQLite та очищення кошика.
+            if (CartItems.Count == 0)
+            {
+                MessageBox.Show("Кошик порожній.", "Магазин",
+                    MessageBoxButton.OK, MessageBoxImage.Information);
+                return;
+            }
+
+            var confirm = MessageBox.Show(
+                $"Підтвердити замовлення на суму {CartItems.Sum(i => i.TotalPrice):N0} грн?",
+                "Оформлення замовлення",
+                MessageBoxButton.YesNo,
+                MessageBoxImage.Question);
+
+            if (confirm != MessageBoxResult.Yes)
+                return;
+
+            // Перевіряємо залишки ще раз (про всяк випадок)
+            foreach (var cartItem in CartItems)
+            {
+                if (cartItem.Product == null || cartItem.Quantity > cartItem.Product.Stock)
+                {
+                    MessageBox.Show(
+                        $"Недостатньо товару «{cartItem.Product?.Name}».",
+                        "Недостатньо товару", MessageBoxButton.OK, MessageBoxImage.Warning);
+                    return;
+                }
+            }
+
+            decimal total = CartItems.Sum(i => i.TotalPrice);
+
+            // Зменшуємо залишки через сервіс
+            foreach (var cartItem in CartItems)
+            {
+                if (cartItem.Product != null)
+                {
+                    cartItem.Product.Stock -= cartItem.Quantity;
+                    _productService.Update(cartItem.Product);
+                }
+            }
+
+            CartItems.Clear();
+            RefreshCart();
+            LoadProducts(); // оновити відображення залишків
+
             MessageBox.Show(
-                "Оформлення замовлення буде реалізовано бізнес-логікою команди.",
-                "Магазин",
+                $"Замовлення успішно оформлено!\nСума: {total:N0} грн.",
+                "Дякуємо за покупку!",
                 MessageBoxButton.OK,
                 MessageBoxImage.Information);
         }
+
+        // ── Вихід ─────────────────────────────────────────────────────
 
         private void LogoutButton_Click(object sender, RoutedEventArgs e)
         {

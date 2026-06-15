@@ -1,19 +1,19 @@
-using System;
 using System.Collections.ObjectModel;
+using System.Linq;
 using System.Windows;
+using System.Windows.Controls;
 using MagazinWPF.Models;
+using MagazinWPF.Services;
 
 namespace MagazinWPF.Views
 {
-    /// <summary>
-    /// Панель адміністратора: товари, категорії, продажі.
-    /// Наразі реалізовано лише зовнішній вигляд (вкладки, таблиці, кнопки) —
-    /// реальні операції додавання/редагування/видалення та роботу з базою
-    /// (EF Core / SQLite, ProductService, SaleService тощо) додасть команда бізнес-логіки.
-    /// </summary>
     public partial class AdminWindow : Window
     {
         private readonly User _currentUser;
+
+        private readonly ProductService _productService = new();
+        private readonly CategoryService _categoryService = new();
+        private readonly SaleService _saleService = new();
 
         public ObservableCollection<Product> Products { get; } = new();
 
@@ -28,71 +28,193 @@ namespace MagazinWPF.Views
             _currentUser = currentUser;
             UserNameTextBlock.Text = $"{currentUser.FullName} ({currentUser.Role})";
 
-            // Демонстраційні дані для зовнішнього вигляду.
-            // TODO: команда замінить це на завантаження даних з бази
-            // через StoreDbContext / Services (ProductService, CartService, SaleService).
-            LoadDemoData();
-
             ProductsItemsControl.ItemsSource = Products;
             CategoriesItemsControl.ItemsSource = Categories;
             SalesDataGrid.ItemsSource = Sales;
+
+            LoadCategories();
+            LoadProducts();
+            LoadSales();
         }
 
-        private void LoadDemoData()
+        private void LoadCategories()
         {
-            Categories.Add(new Category { Id = 1, Name = "Смартфони", Description = "Мобільні телефони", IsActive = true });
-            Categories.Add(new Category { Id = 2, Name = "Ноутбуки", Description = "Портативні комп'ютери", IsActive = true });
-            Categories.Add(new Category { Id = 3, Name = "Периферія", Description = "Миші, клавіатури тощо", IsActive = true });
+            Categories.Clear();
 
-            Products.Add(new Product { Id = 1, Name = "Samsung A26", Price = 9899, Stock = 10, CategoryId = 1 });
-            Products.Add(new Product { Id = 2, Name = "Xiaomi 15", Price = 36999, Stock = 4, CategoryId = 1 });
-            Products.Add(new Product { Id = 3, Name = "Lenovo ThinkPad", Price = 35000, Stock = 5, CategoryId = 2 });
-            Products.Add(new Product { Id = 4, Name = "Logitech Mouse", Price = 800, Stock = 20, CategoryId = 3 });
-
-            Sales.Add(new Sale { Id = 1, SaleDate = DateTime.Now, TotalAmount = 9899, CashierName = "Демо" });
+            foreach (var category in _categoryService.GetAll())
+            {
+                Categories.Add(category);
+            }
         }
 
-        // --- Товари ---
+        private void LoadProducts()
+        {
+            Products.Clear();
+
+            foreach (var product in _productService.GetAll())
+            {
+                Products.Add(product);
+            }
+        }
+
+        private void LoadSales()
+        {
+            Sales.Clear();
+
+            foreach (var sale in _saleService.GetAll())
+            {
+                Sales.Add(sale);
+            }
+        }
 
         private void AddProduct_Click(object sender, RoutedEventArgs e)
         {
-            // TODO: відкрити форму додавання товару та викликати ProductService.AddProduct(...).
+            if (Categories.Count == 0)
+            {
+                MessageBox.Show(
+                    "Спочатку додайте хоча б одну категорію.",
+                    "Магазин",
+                    MessageBoxButton.OK,
+                    MessageBoxImage.Information);
+                return;
+            }
+
+            var window = new ProductEditWindow(Categories.ToList())
+            {
+                Owner = this
+            };
+
+            if (window.ShowDialog() == true)
+            {
+                _productService.Add(window.Product);
+                LoadProducts();
+            }
         }
 
         private void EditProduct_Click(object sender, RoutedEventArgs e)
         {
-            // TODO: sender -> Button -> Tag містить Product картки, на якій натиснули "Редагувати".
-            // Відкрити форму редагування для цього товару через ProductService.
+            if (sender is not Button button || button.Tag is not Product product)
+            {
+                return;
+            }
+
+            var window = new ProductEditWindow(Categories.ToList(), product)
+            {
+                Owner = this
+            };
+
+            if (window.ShowDialog() == true)
+            {
+                _productService.Update(window.Product);
+                LoadProducts();
+            }
         }
 
         private void DeleteProduct_Click(object sender, RoutedEventArgs e)
         {
-            // TODO: sender -> Button -> Tag містить Product картки, на якій натиснули "Видалити".
-            // Видалити товар через ProductService.
-        }
+            if (sender is not Button button || button.Tag is not Product product)
+            {
+                return;
+            }
 
-        // --- Категорії ---
+            var result = MessageBox.Show(
+                $"Видалити товар \"{product.Name}\"?",
+                "Підтвердження видалення",
+                MessageBoxButton.YesNo,
+                MessageBoxImage.Question);
+
+            if (result != MessageBoxResult.Yes)
+            {
+                return;
+            }
+
+            bool deleted = _productService.Delete(product.Id);
+
+            if (!deleted)
+            {
+                MessageBox.Show(
+                    "Неможливо видалити цей товар: він уже фігурує в продажах або кошиках.\n" +
+                    "Можна позначити його як недоступний для продажу замість видалення.",
+                    "Магазин",
+                    MessageBoxButton.OK,
+                    MessageBoxImage.Warning);
+                return;
+            }
+
+            LoadProducts();
+        }
 
         private void AddCategory_Click(object sender, RoutedEventArgs e)
         {
-            // TODO: відкрити форму додавання категорії.
+            var window = new CategoryEditWindow
+            {
+                Owner = this
+            };
+
+            if (window.ShowDialog() == true)
+            {
+                _categoryService.Add(window.Category);
+                LoadCategories();
+            }
         }
 
         private void EditCategory_Click(object sender, RoutedEventArgs e)
         {
-            // TODO: sender -> Button -> Tag містить Category картки, на якій натиснули "Редагувати".
+            if (sender is not Button button || button.Tag is not Category category)
+            {
+                return;
+            }
+
+            var window = new CategoryEditWindow(category)
+            {
+                Owner = this
+            };
+
+            if (window.ShowDialog() == true)
+            {
+                _categoryService.Update(window.Category);
+                LoadCategories();
+                LoadProducts();
+            }
         }
 
         private void DeleteCategory_Click(object sender, RoutedEventArgs e)
         {
-            // TODO: sender -> Button -> Tag містить Category картки, на якій натиснули "Видалити".
-        }
+            if (sender is not Button button || button.Tag is not Category category)
+            {
+                return;
+            }
 
-        // --- Продажі ---
+            var result = MessageBox.Show(
+                $"Видалити категорію \"{category.Name}\"?",
+                "Підтвердження видалення",
+                MessageBoxButton.YesNo,
+                MessageBoxImage.Question);
+
+            if (result != MessageBoxResult.Yes)
+            {
+                return;
+            }
+
+            bool deleted = _categoryService.Delete(category.Id);
+
+            if (!deleted)
+            {
+                MessageBox.Show(
+                    "Неможливо видалити цю категорію: у ній ще є товари.\n" +
+                    "Спочатку перенесіть або видаліть товари цієї категорії.",
+                    "Магазин",
+                    MessageBoxButton.OK,
+                    MessageBoxImage.Warning);
+                return;
+            }
+
+            LoadCategories();
+        }
 
         private void RefreshSales_Click(object sender, RoutedEventArgs e)
         {
-            // TODO: перезавантажити список продажів з бази через SaleService.
+            LoadSales();
         }
 
         private void LogoutButton_Click(object sender, RoutedEventArgs e)
