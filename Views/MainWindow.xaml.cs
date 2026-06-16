@@ -8,16 +8,13 @@ using MagazinWPF.Services;
 
 namespace MagazinWPF.Views
 {
-    /// <summary>
-    /// Вікно покупця: каталог товарів, категорії та кошик.
-    /// Дані товарів і категорій надходять через сервіси та синхронізуються з адмін-панеллю.
-    /// </summary>
     public partial class MainWindow : Window
     {
         private readonly User _currentUser;
 
         private readonly ProductService _productService = new();
         private readonly CategoryService _categoryService = new();
+        private readonly SaleService _saleService = new();
 
         private int? _selectedCategoryId;
 
@@ -68,8 +65,6 @@ namespace MagazinWPF.Views
             });
         }
 
-        // ── Завантаження даних ───────────────────────────────────────
-
         private void LoadCategories()
         {
             int? previouslySelected = _selectedCategoryId;
@@ -100,8 +95,6 @@ namespace MagazinWPF.Views
             }
         }
 
-        // ── Фільтрація за категорією ──────────────────────────────────
-
         private void CategoriesListBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             if (CategoriesListBox.SelectedItem is CategoryFilterItem item)
@@ -110,8 +103,6 @@ namespace MagazinWPF.Views
                 LoadProducts();
             }
         }
-
-        // ── Кошик ─────────────────────────────────────────────────────
 
         private void AddToCart_Click(object sender, RoutedEventArgs e)
         {
@@ -194,8 +185,6 @@ namespace MagazinWPF.Views
             TotalAmountTextBlock.Text = $"{total:N0}";
         }
 
-        // ── Оформлення замовлення ──────────────────────────────────────
-
         private void Checkout_Click(object sender, RoutedEventArgs e)
         {
             if (CartItems.Count == 0)
@@ -214,7 +203,6 @@ namespace MagazinWPF.Views
             if (confirm != MessageBoxResult.Yes)
                 return;
 
-            // Перевіряємо залишки ще раз (про всяк випадок)
             foreach (var cartItem in CartItems)
             {
                 if (cartItem.Product == null || cartItem.Quantity > cartItem.Product.Stock)
@@ -226,30 +214,34 @@ namespace MagazinWPF.Views
                 }
             }
 
-            decimal total = CartItems.Sum(i => i.TotalPrice);
+            Sale sale;
 
-            // Зменшуємо залишки через сервіс
-            foreach (var cartItem in CartItems)
+            try
             {
-                if (cartItem.Product != null)
-                {
-                    cartItem.Product.Stock -= cartItem.Quantity;
-                    _productService.Update(cartItem.Product);
-                }
+                sale = _saleService.Checkout(CartItems, _currentUser.FullName);
+            }
+            catch (InvalidOperationException ex)
+            {
+                MessageBox.Show(ex.Message, "Недостатньо товару",
+                    MessageBoxButton.OK, MessageBoxImage.Warning);
+                LoadProducts();
+                return;
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(
+                    $"Помилка при оформленні замовлення: {ex.Message}",
+                    "Помилка", MessageBoxButton.OK, MessageBoxImage.Error);
+                return;
             }
 
             CartItems.Clear();
             RefreshCart();
-            LoadProducts(); // оновити відображення залишків
+            LoadProducts();
 
-            MessageBox.Show(
-                $"Замовлення успішно оформлено!\nСума: {total:N0} грн.",
-                "Дякуємо за покупку!",
-                MessageBoxButton.OK,
-                MessageBoxImage.Information);
+            var receiptWindow = new ReceiptWindow(sale) { Owner = this };
+            receiptWindow.ShowDialog();
         }
-
-        // ── Вихід ─────────────────────────────────────────────────────
 
         private void LogoutButton_Click(object sender, RoutedEventArgs e)
         {

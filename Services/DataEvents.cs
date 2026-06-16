@@ -6,9 +6,12 @@ namespace MagazinWPF.Services
     {
         public static event Action? ProductsChanged;
         public static event Action? CategoriesChanged;
+        public static event Action? SalesChanged;
 
         public static void RaiseProductsChanged() => ProductsChanged?.Invoke();
 
         public static void RaiseCategoriesChanged() => CategoriesChanged?.Invoke();
+
+        public static void RaiseSalesChanged() => SalesChanged?.Invoke();
     }
 }

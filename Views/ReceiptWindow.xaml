@@ -1,0 +1,93 @@
+﻿<Window x:Class="MagazinWPF.Views.ReceiptWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Чек"
+        Height="560" Width="380"
+        WindowStartupLocation="CenterOwner"
+        ResizeMode="NoResize"
+        FontFamily="Segoe UI"
+        Background="{StaticResource BackgroundBrush}">
+
+    <Grid Margin="24">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <Border Grid.Row="0" Style="{StaticResource ItemCardStyle}" Margin="0">
+            <ScrollViewer VerticalScrollBarVisibility="Auto">
+                <StackPanel>
+
+                    <TextBlock Text="🧾" FontSize="28" HorizontalAlignment="Center" Margin="0,0,0,8"/>
+                    <TextBlock Text="Магазин" FontSize="18" FontWeight="Bold"
+                               Foreground="{StaticResource PrimaryBrush}"
+                               HorizontalAlignment="Center"/>
+                    <TextBlock Text="Чек на оплату" FontSize="12"
+                               Foreground="{StaticResource MutedTextBrush}"
+                               HorizontalAlignment="Center" Margin="0,0,0,16"/>
+
+                    <Separator Margin="0,0,0,12"/>
+
+                    <Grid Margin="0,0,0,4">
+                        <TextBlock Text="Чек №" Foreground="{StaticResource MutedTextBrush}" FontSize="12"/>
+                        <TextBlock x:Name="SaleIdTextBlock" HorizontalAlignment="Right" FontWeight="SemiBold" FontSize="12"/>
+                    </Grid>
+
+                    <Grid Margin="0,0,0,4">
+                        <TextBlock Text="Дата" Foreground="{StaticResource MutedTextBrush}" FontSize="12"/>
+                        <TextBlock x:Name="SaleDateTextBlock" HorizontalAlignment="Right" FontWeight="SemiBold" FontSize="12"/>
+                    </Grid>
+
+                    <Grid Margin="0,0,0,12">
+                        <TextBlock Text="Покупець" Foreground="{StaticResource MutedTextBrush}" FontSize="12"/>
+                        <TextBlock x:Name="CustomerNameTextBlock" HorizontalAlignment="Right" FontWeight="SemiBold" FontSize="12"/>
+                    </Grid>
+
+                    <Separator Margin="0,0,0,12"/>
+
+                    <ItemsControl x:Name="ItemsListControl">
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate>
+                                <Grid Margin="0,0,0,10">
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="Auto"/>
+                                        <RowDefinition Height="Auto"/>
+                                    </Grid.RowDefinitions>
+                                    <TextBlock Grid.Row="0" Text="{Binding ProductName}" FontWeight="SemiBold" FontSize="13" TextWrapping="Wrap"/>
+                                    <Grid Grid.Row="1">
+                                        <TextBlock Foreground="{StaticResource MutedTextBrush}" FontSize="12">
+                                            <Run Text="{Binding Quantity}"/>
+                                            <Run Text=" x "/>
+                                            <Run Text="{Binding UnitPrice, StringFormat=N0}"/>
+                                            <Run Text=" грн"/>
+                                        </TextBlock>
+                                        <TextBlock HorizontalAlignment="Right" FontWeight="SemiBold" FontSize="13">
+                                            <Run Text="{Binding Subtotal, Mode=OneWay, StringFormat=N0}"/>
+                                            <Run Text=" грн"/>
+                                        </TextBlock>
+                                    </Grid>
+                                </Grid>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+
+                    <Separator Margin="0,4,0,12"/>
+
+                    <Grid>
+                        <TextBlock Text="Разом" FontWeight="Bold" FontSize="16"/>
+                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                            <TextBlock x:Name="TotalTextBlock" FontWeight="Bold" FontSize="16"
+                                       Foreground="{StaticResource PrimaryBrush}"/>
+                            <TextBlock Text=" грн" FontWeight="Bold" FontSize="16"
+                                       Foreground="{StaticResource PrimaryBrush}"/>
+                        </StackPanel>
+                    </Grid>
+
+                </StackPanel>
+            </ScrollViewer>
+        </Border>
+
+        <Button Grid.Row="1" Content="Закрити" Margin="0,16,0,0"
+                Style="{StaticResource PrimaryButton}" Click="Close_Click"/>
+    </Grid>
+</Window>

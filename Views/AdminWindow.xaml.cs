@@ -1,3 +1,4 @@
+using System;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Windows;
@@ -35,6 +36,19 @@ namespace MagazinWPF.Views
             LoadCategories();
             LoadProducts();
             LoadSales();
+
+            DataEvents.SalesChanged += OnSalesChanged;
+            Closed += AdminWindow_Closed;
+        }
+
+        private void AdminWindow_Closed(object? sender, EventArgs e)
+        {
+            DataEvents.SalesChanged -= OnSalesChanged;
+        }
+
+        private void OnSalesChanged()
+        {
+            Dispatcher.Invoke(LoadSales);
         }
 
         private void LoadCategories()
@@ -215,6 +229,21 @@ namespace MagazinWPF.Views
         private void RefreshSales_Click(object sender, RoutedEventArgs e)
         {
             LoadSales();
+        }
+
+        private void ViewReceipt_Click(object sender, RoutedEventArgs e)
+        {
+            if (sender is not Button button || button.Tag is not Sale sale)
+            {
+                return;
+            }
+
+            var receiptWindow = new ReceiptWindow(sale)
+            {
+                Owner = this
+            };
+
+            receiptWindow.ShowDialog();
         }
 
         private void LogoutButton_Click(object sender, RoutedEventArgs e)
