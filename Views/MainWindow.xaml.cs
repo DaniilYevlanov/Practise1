@@ -8,23 +8,20 @@ using MagazinWPF.Services;
 
 namespace MagazinWPF.Views
 {
-    /// <summary>
-    /// Вікно покупця: каталог товарів, категорії та кошик.
-    /// Дані товарів і категорій надходять через сервіси та синхронізуються з адмін-панеллю.
-    /// </summary>
     public partial class MainWindow : Window
     {
         private readonly User _currentUser;
 
         private readonly ProductService _productService = new();
         private readonly CategoryService _categoryService = new();
+        private readonly SaleService _saleService = new();
 
         private int? _selectedCategoryId;
 
         public ObservableCollection<Product> Products { get; } = new();
         public ObservableCollection<CartItem> CartItems { get; } = new();
-
         public ObservableCollection<CategoryFilterItem> CategoryFilters { get; } = new();
+        public ObservableCollection<Sale> History { get; } = new();
 
         public MainWindow(User currentUser)
         {
@@ -35,9 +32,9 @@ namespace MagazinWPF.Views
 
             ProductsItemsControl.ItemsSource = Products;
             CartItemsControl.ItemsSource = CartItems;
-
             CategoriesListBox.ItemsSource = CategoryFilters;
             CategoriesListBox.DisplayMemberPath = "Name";
+            HistoryDataGrid.ItemsSource = History;
 
             LoadCategories();
             LoadProducts();
@@ -54,10 +51,7 @@ namespace MagazinWPF.Views
             DataEvents.CategoriesChanged -= OnCategoriesChanged;
         }
 
-        private void OnProductsChanged()
-        {
-            Dispatcher.Invoke(LoadProducts);
-        }
+        private void OnProductsChanged() => Dispatcher.Invoke(LoadProducts);
 
         private void OnCategoriesChanged()
         {
@@ -78,9 +72,7 @@ namespace MagazinWPF.Views
             CategoryFilters.Add(new CategoryFilterItem(null, "Усі товари"));
 
             foreach (var category in _categoryService.GetAll().Where(c => c.IsActive))
-            {
                 CategoryFilters.Add(new CategoryFilterItem(category.Id, category.Name));
-            }
 
             var match = CategoryFilters.FirstOrDefault(c => c.Id == previouslySelected);
             CategoriesListBox.SelectedItem = match ?? CategoryFilters[0];
@@ -95,9 +87,35 @@ namespace MagazinWPF.Views
                 : _productService.GetByCategory(_selectedCategoryId.Value);
 
             foreach (var product in items.Where(p => p.IsAvailable))
-            {
                 Products.Add(product);
+        }
+
+        private void LoadHistory()
+        {
+            try
+            {
+                History.Clear();
+                foreach (var sale in _saleService.GetByCustomer(_currentUser.Login))
+                    History.Add(sale);
             }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Помилка завантаження історії: {ex.Message}", "Помилка",
+                    MessageBoxButton.OK, MessageBoxImage.Warning);
+            }
+        }
+
+        // ── Перемикання вкладок ───────────────────────────────────────
+
+        private void TabControl_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (e.Source is TabControl tc && tc.SelectedIndex == 1)
+                LoadHistory();
+        }
+
+        private void RefreshHistory_Click(object sender, RoutedEventArgs e)
+        {
+            LoadHistory();
         }
 
         // ── Фільтрація за категорією ──────────────────────────────────
@@ -125,25 +143,19 @@ namespace MagazinWPF.Views
             {
                 MessageBox.Show(
                     $"У наявності лише {product.Stock} шт. товару «{product.Name}».",
-                    "Недостатньо товару",
-                    MessageBoxButton.OK,
-                    MessageBoxImage.Warning);
+                    "Недостатньо товару", MessageBoxButton.OK, MessageBoxImage.Warning);
                 return;
             }
 
             if (existing != null)
-            {
                 existing.Quantity++;
-            }
             else
-            {
                 CartItems.Add(new CartItem
                 {
                     Product = product,
                     Quantity = 1,
                     UnitPrice = product.Price
                 });
-            }
 
             RefreshCart();
         }
@@ -159,9 +171,7 @@ namespace MagazinWPF.Views
             {
                 MessageBox.Show(
                     $"У наявності лише {stock} шт. товару «{item.Product?.Name}».",
-                    "Недостатньо товару",
-                    MessageBoxButton.OK,
-                    MessageBoxImage.Warning);
+                    "Недостатньо товару", MessageBoxButton.OK, MessageBoxImage.Warning);
                 return;
             }
 
@@ -214,7 +224,6 @@ namespace MagazinWPF.Views
             if (confirm != MessageBoxResult.Yes)
                 return;
 
-            // Перевіряємо залишки ще раз (про всяк випадок)
             foreach (var cartItem in CartItems)
             {
                 if (cartItem.Product == null || cartItem.Quantity > cartItem.Product.Stock)
@@ -228,6 +237,22 @@ namespace MagazinWPF.Views
 
             decimal total = CartItems.Sum(i => i.TotalPrice);
 
+            // Зберігаємо продаж у БД, CashierName = логін покупця
+            var sale = new Sale
+            {
+                SaleDate = DateTime.Now,
+                TotalAmount = total,
+                CashierName = _currentUser.Login,
+                Items = CartItems.Select(ci => new SaleItem
+                {
+                    ProductId = ci.Product!.Id,
+                    Quantity = ci.Quantity,
+                    UnitPrice = ci.UnitPrice
+                }).ToList()
+            };
+
+            _saleService.Add(sale);
+
             // Зменшуємо залишки через сервіс
             foreach (var cartItem in CartItems)
             {
@@ -240,7 +265,7 @@ namespace MagazinWPF.Views
 
             CartItems.Clear();
             RefreshCart();
-            LoadProducts(); // оновити відображення залишків
+            LoadProducts();
 
             MessageBox.Show(
                 $"Замовлення успішно оформлено!\nСума: {total:N0} грн.",
