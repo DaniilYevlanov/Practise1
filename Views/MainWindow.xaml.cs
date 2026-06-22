@@ -86,8 +86,24 @@ namespace MagazinWPF.Views
                 ? _productService.GetAll()
                 : _productService.GetByCategory(_selectedCategoryId.Value);
 
-            foreach (var product in items.Where(p => p.IsAvailable))
+            var filtered = items.Where(p => p.IsAvailable).AsEnumerable();
+
+            if (FilterAvailableCheckBox?.IsChecked == true)
+                filtered = filtered.Where(p => p.IsAvailable);
+
+            if (FilterTopCheckBox?.IsChecked == true)
+                filtered = filtered.Where(p => p.IsTop);
+
+            if (FilterNewCheckBox?.IsChecked == true)
+                filtered = filtered.Where(p => p.IsNew);
+
+            foreach (var product in filtered)
                 Products.Add(product);
+        }
+
+        private void Filter_Changed(object sender, RoutedEventArgs e)
+        {
+            LoadProducts();
         }
 
         private void LoadHistory()
