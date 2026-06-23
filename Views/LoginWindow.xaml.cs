@@ -45,6 +45,14 @@ namespace MagazinWPF.Views
             TabLoginButton.Foreground    = (Brush)FindResource("MutedTextBrush");
         }
 
+        private void RegPasswordBox_PasswordChanged(object sender, RoutedEventArgs e)
+        {
+            int len = RegPasswordBox.Password.Length;
+            PasswordHintTextBlock.Visibility = (len > 0 && len < 6)
+                ? Visibility.Visible
+                : Visibility.Collapsed;
+        }
+
         private void LoginButton_Click(object sender, RoutedEventArgs e)
         {
             string login    = LoginTextBox.Text.Trim();
@@ -133,9 +141,9 @@ namespace MagazinWPF.Views
             db.Users.Add(newAccount);
             db.SaveChanges();
 
-            RegFullNameTextBox.Text  = string.Empty;
-            RegLoginTextBox.Text     = string.Empty;
-            RegPasswordBox.Password  = string.Empty;
+            RegFullNameTextBox.Text        = string.Empty;
+            RegLoginTextBox.Text           = string.Empty;
+            RegPasswordBox.Password        = string.Empty;
             RegConfirmPasswordBox.Password = string.Empty;
 
             ShowSuccess("Реєстрацію успішно завершено! Тепер увійдіть.");

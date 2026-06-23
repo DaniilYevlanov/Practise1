@@ -77,7 +77,13 @@
 
                 <TextBlock Text="Пароль" FontSize="12"
                            Foreground="{StaticResource MutedTextBrush}" Margin="0,0,0,4"/>
-                <PasswordBox x:Name="RegPasswordBox" Margin="0,0,0,12"/>
+                <PasswordBox x:Name="RegPasswordBox" Margin="0,0,0,4"
+                             PasswordChanged="RegPasswordBox_PasswordChanged"/>
+                <TextBlock x:Name="PasswordHintTextBlock"
+                           FontSize="11" Margin="0,0,0,12"
+                           Foreground="{StaticResource DangerBrush}"
+                           Text="Мінімум 6 символів"
+                           Visibility="Collapsed"/>
 
                 <TextBlock Text="Підтвердження пароля" FontSize="12"
                            Foreground="{StaticResource MutedTextBrush}" Margin="0,0,0,4"/>
