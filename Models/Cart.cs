@@ -13,9 +13,7 @@ namespace MagazinWPF.Models
 
         public ICollection<CartItem> Items { get; set; } = new List<CartItem>();
 
-        /// <summary>
-        /// Загальна сума кошика (обчислюється автоматично за товарами в ньому).
-        /// </summary>
+
         public decimal TotalAmount => Items.Sum(i => i.TotalPrice);
     }
 }

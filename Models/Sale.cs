@@ -1,8 +1,6 @@
 namespace MagazinWPF.Models
 {
-    /// <summary>
-    /// Оформлений продаж (чек).
-    /// </summary>
+
     public class Sale
     {
         public int Id { get; set; }

@@ -1,8 +1,6 @@
 namespace MagazinWPF.Models
 {
-    /// <summary>
-    /// Товар у каталозі магазину.
-    /// </summary>
+
     public class Product
     {
         public int Id { get; set; }

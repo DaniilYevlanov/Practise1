@@ -13,7 +13,6 @@
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
 
-        <!-- Верхня панель -->
         <Border Grid.Row="0" Background="{StaticResource PrimaryBrush}" Padding="24,16">
             <Grid>
                 <StackPanel Orientation="Horizontal">
@@ -33,7 +32,6 @@
 
         <TabControl Grid.Row="1" Margin="24,16,24,24">
 
-            <!-- ===================== Товари ===================== -->
             <TabItem Header="Товари">
                 <Grid Margin="0,16,0,0">
                     <Grid.RowDefinitions>
@@ -48,7 +46,9 @@
                         </Grid.ColumnDefinitions>
                         <TextBox Grid.Column="0" x:Name="ProductSearchTextBox"
                                  MaxWidth="320" HorizontalAlignment="Left"
-                                 Text="Пошук товару..." Foreground="{StaticResource MutedTextBrush}"/>
+                                 Text="Пошук товару..." Foreground="{StaticResource MutedTextBrush}"
+                                 GotFocus="ProductSearchTextBox_GotFocus"
+                                 LostFocus="ProductSearchTextBox_LostFocus"/>
                         <Button Grid.Column="1" Content="＋ Додати товар"
                                 Style="{StaticResource PrimaryButton}" Click="AddProduct_Click"/>
                     </Grid>
@@ -64,32 +64,22 @@
                                 <DataTemplate>
                                     <Border Width="220" Style="{StaticResource ItemCardStyle}">
                                         <StackPanel>
-
-                                            <!-- Зображення -->
                                             <Border Height="110" Background="#F1F3F5" CornerRadius="10" Margin="0,0,0,10">
                                                 <TextBlock Text="📦" FontSize="32" HorizontalAlignment="Center" VerticalAlignment="Center"/>
                                             </Border>
-
-                                            <!-- Назва -->
                                             <TextBlock Text="{Binding Name}" FontWeight="SemiBold" FontSize="14"
                                                        TextWrapping="Wrap" Margin="0,0,0,4"/>
-
-                                            <!-- Ціна -->
                                             <StackPanel Orientation="Horizontal" Margin="0,0,0,8">
                                                 <TextBlock Text="{Binding Price, StringFormat=N0}"
                                                            Foreground="{StaticResource PrimaryBrush}" FontWeight="Bold" FontSize="15"/>
                                                 <TextBlock Text=" грн" Foreground="{StaticResource PrimaryBrush}" FontWeight="Bold" FontSize="15"/>
                                             </StackPanel>
-
-                                            <!-- Залишок -->
                                             <Border Style="{StaticResource BadgeBorder}" Background="{StaticResource PrimaryLightBrush}" Margin="0,0,0,12">
                                                 <StackPanel Orientation="Horizontal">
                                                     <TextBlock Text="Залишок: " Style="{StaticResource BadgeText}" Foreground="{StaticResource PrimaryBrush}"/>
                                                     <TextBlock Text="{Binding Stock}" Style="{StaticResource BadgeText}" Foreground="{StaticResource PrimaryBrush}"/>
                                                 </StackPanel>
                                             </Border>
-
-                                            <!-- Дії -->
                                             <Grid>
                                                 <Grid.ColumnDefinitions>
                                                     <ColumnDefinition Width="*"/>
@@ -100,7 +90,6 @@
                                                 <Button Grid.Column="1" Content="Видалити" Margin="4,0,0,0"
                                                         Style="{StaticResource DangerButton}" Tag="{Binding}" Click="DeleteProduct_Click"/>
                                             </Grid>
-
                                         </StackPanel>
                                     </Border>
                                 </DataTemplate>
@@ -110,7 +99,6 @@
                 </Grid>
             </TabItem>
 
-            <!-- ===================== Категорії ===================== -->
             <TabItem Header="Категорії">
                 <Grid Margin="0,16,0,0">
                     <Grid.RowDefinitions>
@@ -132,14 +120,12 @@
                                 <DataTemplate>
                                     <Border Width="260" Style="{StaticResource ItemCardStyle}">
                                         <StackPanel>
-
                                             <Grid Margin="0,0,0,8">
                                                 <Grid.ColumnDefinitions>
                                                     <ColumnDefinition Width="*"/>
                                                     <ColumnDefinition Width="Auto"/>
                                                 </Grid.ColumnDefinitions>
                                                 <TextBlock Grid.Column="0" Text="{Binding Name}" FontWeight="SemiBold" FontSize="15" VerticalAlignment="Center"/>
-
                                                 <Border Grid.Column="1">
                                                     <Border.Style>
                                                         <Style TargetType="Border" BasedOn="{StaticResource BadgeBorder}">
@@ -167,10 +153,8 @@
                                                     </TextBlock>
                                                 </Border>
                                             </Grid>
-
                                             <TextBlock Text="{Binding Description}" Foreground="{StaticResource MutedTextBrush}"
                                                        FontSize="12" TextWrapping="Wrap" Margin="0,0,0,12" MinHeight="32"/>
-
                                             <Grid>
                                                 <Grid.ColumnDefinitions>
                                                     <ColumnDefinition Width="*"/>
@@ -181,7 +165,6 @@
                                                 <Button Grid.Column="1" Content="Видалити" Margin="4,0,0,0"
                                                         Style="{StaticResource DangerButton}" Tag="{Binding}" Click="DeleteCategory_Click"/>
                                             </Grid>
-
                                         </StackPanel>
                                     </Border>
                                 </DataTemplate>
@@ -191,7 +174,6 @@
                 </Grid>
             </TabItem>
 
-            <!-- ===================== Продажі ===================== -->
             <TabItem Header="Продажі">
                 <Grid Margin="0,16,0,0">
                     <Grid.RowDefinitions>
@@ -203,12 +185,23 @@
                             Style="{StaticResource SecondaryButton}" Click="RefreshSales_Click"/>
 
                     <Border Grid.Row="1" Style="{StaticResource ItemCardStyle}" Margin="0">
-                        <DataGrid x:Name="SalesDataGrid" AutoGenerateColumns="False" IsReadOnly="True">
+                        <DataGrid x:Name="SalesDataGrid" AutoGenerateColumns="False" IsReadOnly="True"
+                                  MouseDoubleClick="SalesDataGrid_MouseDoubleClick">
                             <DataGrid.Columns>
                                 <DataGridTextColumn Header="ID" Binding="{Binding Id}" Width="60"/>
-                                <DataGridTextColumn Header="Дата" Binding="{Binding SaleDate}" Width="180"/>
-                                <DataGridTextColumn Header="Сума, грн" Binding="{Binding TotalAmount}" Width="120"/>
+                                <DataGridTextColumn Header="Дата" Binding="{Binding SaleDate, StringFormat=dd.MM.yyyy HH:mm}" Width="150"/>
+                                <DataGridTextColumn Header="Сума, грн" Binding="{Binding TotalAmount, StringFormat=N2}" Width="120"/>
                                 <DataGridTextColumn Header="Касир" Binding="{Binding CashierName}" Width="*"/>
+                                <DataGridTemplateColumn Header="Чек" Width="90">
+                                    <DataGridTemplateColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <Button Content="🧾 Чек" Tag="{Binding}"
+                                                    Click="ViewReceipt_Click"
+                                                    Style="{StaticResource SecondaryButton}"
+                                                    Padding="8,4" FontSize="12"/>
+                                        </DataTemplate>
+                                    </DataGridTemplateColumn.CellTemplate>
+                                </DataGridTemplateColumn>
                             </DataGrid.Columns>
                         </DataGrid>
                     </Border>

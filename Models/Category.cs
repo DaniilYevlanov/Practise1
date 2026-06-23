@@ -1,8 +1,6 @@
 namespace MagazinWPF.Models
 {
-    /// <summary>
-    /// Категорія товарів (наприклад: Смартфони, Ноутбуки, Периферія).
-    /// </summary>
+
     public class Category
     {
         public int Id { get; set; }

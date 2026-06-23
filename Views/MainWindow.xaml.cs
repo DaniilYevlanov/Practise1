@@ -10,7 +10,8 @@ namespace MagazinWPF.Views
 {
     public partial class MainWindow : Window
     {
-        private readonly User _currentUser;
+    
+        private readonly Customer _currentUser;
 
         private readonly ProductService _productService = new();
         private readonly CategoryService _categoryService = new();
@@ -23,11 +24,12 @@ namespace MagazinWPF.Views
         public ObservableCollection<CategoryFilterItem> CategoryFilters { get; } = new();
         public ObservableCollection<Sale> History { get; } = new();
 
-        public MainWindow(User currentUser)
+        public MainWindow(Customer currentUser)
         {
             InitializeComponent();
 
             _currentUser = currentUser;
+
             UserNameTextBlock.Text = $"{currentUser.FullName} ({currentUser.Role})";
 
             ProductsItemsControl.ItemsSource = Products;
@@ -61,8 +63,6 @@ namespace MagazinWPF.Views
                 LoadProducts();
             });
         }
-
-        // ── Завантаження даних ───────────────────────────────────────
 
         private void LoadCategories()
         {
@@ -102,15 +102,14 @@ namespace MagazinWPF.Views
         }
 
         private void Filter_Changed(object sender, RoutedEventArgs e)
-        {
-            LoadProducts();
-        }
+            => LoadProducts();
 
         private void LoadHistory()
         {
             try
             {
                 History.Clear();
+
                 foreach (var sale in _saleService.GetByCustomer(_currentUser.Login))
                     History.Add(sale);
             }
@@ -121,8 +120,6 @@ namespace MagazinWPF.Views
             }
         }
 
-        // ── Перемикання вкладок ───────────────────────────────────────
-
         private void TabControl_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             if (e.Source is TabControl tc && tc.SelectedIndex == 1)
@@ -130,11 +127,28 @@ namespace MagazinWPF.Views
         }
 
         private void RefreshHistory_Click(object sender, RoutedEventArgs e)
+            => LoadHistory();
+
+        private void ViewReceipt_Click(object sender, RoutedEventArgs e)
         {
-            LoadHistory();
+            if (sender is not Button btn || btn.Tag is not Sale sale)
+                return;
+
+            var fullSale = _saleService.GetById(sale.Id);
+            if (fullSale != null)
+                new ReceiptWindow(fullSale) { Owner = this }.ShowDialog();
         }
 
-        // ── Фільтрація за категорією ──────────────────────────────────
+        private void HistoryDataGrid_MouseDoubleClick(object sender,
+            System.Windows.Input.MouseButtonEventArgs e)
+        {
+            if (HistoryDataGrid.SelectedItem is Sale sale)
+            {
+                var fullSale = _saleService.GetById(sale.Id);
+                if (fullSale != null)
+                    new ReceiptWindow(fullSale) { Owner = this }.ShowDialog();
+            }
+        }
 
         private void CategoriesListBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
@@ -144,8 +158,6 @@ namespace MagazinWPF.Views
                 LoadProducts();
             }
         }
-
-        // ── Кошик ─────────────────────────────────────────────────────
 
         private void AddToCart_Click(object sender, RoutedEventArgs e)
         {
@@ -220,8 +232,6 @@ namespace MagazinWPF.Views
             TotalAmountTextBlock.Text = $"{total:N0}";
         }
 
-        // ── Оформлення замовлення ──────────────────────────────────────
-
         private void Checkout_Click(object sender, RoutedEventArgs e)
         {
             if (CartItems.Count == 0)
@@ -231,11 +241,12 @@ namespace MagazinWPF.Views
                 return;
             }
 
+            decimal total = CartItems.Sum(i => i.TotalPrice);
+
             var confirm = MessageBox.Show(
-                $"Підтвердити замовлення на суму {CartItems.Sum(i => i.TotalPrice):N0} грн?",
+                $"Підтвердити замовлення на суму {total:N0} грн?",
                 "Оформлення замовлення",
-                MessageBoxButton.YesNo,
-                MessageBoxImage.Question);
+                MessageBoxButton.YesNo, MessageBoxImage.Question);
 
             if (confirm != MessageBoxResult.Yes)
                 return;
@@ -251,9 +262,6 @@ namespace MagazinWPF.Views
                 }
             }
 
-            decimal total = CartItems.Sum(i => i.TotalPrice);
-
-            // Зберігаємо продаж у БД, CashierName = логін покупця
             var sale = new Sale
             {
                 SaleDate = DateTime.Now,
@@ -269,7 +277,6 @@ namespace MagazinWPF.Views
 
             _saleService.Add(sale);
 
-            // Зменшуємо залишки через сервіс
             foreach (var cartItem in CartItems)
             {
                 if (cartItem.Product != null)
@@ -283,14 +290,11 @@ namespace MagazinWPF.Views
             RefreshCart();
             LoadProducts();
 
-            MessageBox.Show(
-                $"Замовлення успішно оформлено!\nСума: {total:N0} грн.",
-                "Дякуємо за покупку!",
-                MessageBoxButton.OK,
-                MessageBoxImage.Information);
-        }
 
-        // ── Вихід ─────────────────────────────────────────────────────
+            var savedSale = _saleService.GetById(sale.Id);
+            if (savedSale != null)
+                new ReceiptWindow(savedSale) { Owner = this }.ShowDialog();
+        }
 
         private void LogoutButton_Click(object sender, RoutedEventArgs e)
         {

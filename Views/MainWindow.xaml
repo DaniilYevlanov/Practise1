@@ -32,7 +32,6 @@
 
         <TabControl Grid.Row="1" Margin="24,16,24,24" SelectionChanged="TabControl_SelectionChanged">
 
-            <!-- ===================== Каталог ===================== -->
             <TabItem Header="Каталог">
                 <Grid Margin="0,16,0,0">
                     <Grid.ColumnDefinitions>
@@ -110,24 +109,20 @@
                                                     <Border Height="100" Background="#F1F3F5" CornerRadius="10" Margin="0,0,0,10">
                                                         <TextBlock Text="📦" FontSize="32" HorizontalAlignment="Center" VerticalAlignment="Center"/>
                                                     </Border>
-
                                                     <TextBlock Text="{Binding Name}" FontWeight="SemiBold" FontSize="13"
                                                                TextWrapping="Wrap" Margin="0,0,0,6" MinHeight="36"/>
-
                                                     <StackPanel Orientation="Horizontal" Margin="0,0,0,4">
                                                         <TextBlock Text="{Binding Price, StringFormat=N0}"
                                                                    Foreground="{StaticResource PrimaryBrush}" FontWeight="Bold" FontSize="15"/>
                                                         <TextBlock Text=" грн"
                                                                    Foreground="{StaticResource PrimaryBrush}" FontWeight="Bold" FontSize="15"/>
                                                     </StackPanel>
-
                                                     <TextBlock Margin="0,0,0,10" FontSize="11"
                                                                Foreground="{StaticResource MutedTextBrush}">
                                                         <Run Text="В наявності: "/>
                                                         <Run Text="{Binding Stock}"/>
                                                         <Run Text=" шт."/>
                                                     </TextBlock>
-
                                                     <Button Content="Купити" Style="{StaticResource PrimaryButton}"
                                                             Tag="{Binding}" Click="AddToCart_Click"/>
                                                 </StackPanel>
@@ -162,7 +157,6 @@
                                                         <ColumnDefinition Width="*"/>
                                                         <ColumnDefinition Width="Auto"/>
                                                     </Grid.ColumnDefinitions>
-
                                                     <StackPanel Grid.Column="0" VerticalAlignment="Center">
                                                         <TextBlock Text="{Binding Product.Name}" FontSize="13" FontWeight="SemiBold" TextWrapping="Wrap"/>
                                                         <StackPanel Orientation="Horizontal" Margin="0,2,0,0">
@@ -170,7 +164,6 @@
                                                             <TextBlock Text=" грн" FontSize="12" Foreground="{StaticResource MutedTextBrush}"/>
                                                         </StackPanel>
                                                     </StackPanel>
-
                                                     <StackPanel Grid.Column="1" Orientation="Horizontal" VerticalAlignment="Center">
                                                         <Button Content="−" Style="{StaticResource RoundIconButton}"
                                                                 Tag="{Binding}" Click="DecreaseQuantity_Click"/>
@@ -206,7 +199,6 @@
                 </Grid>
             </TabItem>
 
-            <!-- ===================== Історія покупок ===================== -->
             <TabItem Header="Історія покупок">
                 <Grid Margin="0,16,0,0">
                     <Grid.RowDefinitions>
@@ -218,28 +210,36 @@
                             Style="{StaticResource SecondaryButton}" Click="RefreshHistory_Click"/>
 
                     <Border Grid.Row="1" Style="{StaticResource ItemCardStyle}" Margin="0">
-                        <DataGrid x:Name="HistoryDataGrid" AutoGenerateColumns="False" IsReadOnly="True">
+                        <DataGrid x:Name="HistoryDataGrid" AutoGenerateColumns="False" IsReadOnly="True"
+                                  MouseDoubleClick="HistoryDataGrid_MouseDoubleClick">
                             <DataGrid.Columns>
                                 <DataGridTextColumn Header="ID" Binding="{Binding Id}" Width="60"/>
-                                <DataGridTextColumn Header="Дата" Binding="{Binding SaleDate}" Width="180"/>
-                                <DataGridTextColumn Header="Сума, грн" Binding="{Binding TotalAmount}" Width="120"/>
+                                <DataGridTextColumn Header="Дата" Binding="{Binding SaleDate, StringFormat=dd.MM.yyyy HH:mm}" Width="150"/>
+                                <DataGridTextColumn Header="Сума, грн" Binding="{Binding TotalAmount, StringFormat=N2}" Width="120"/>
                                 <DataGridTemplateColumn Header="Товари" Width="*">
                                     <DataGridTemplateColumn.CellTemplate>
                                         <DataTemplate>
                                             <ItemsControl ItemsSource="{Binding Items}">
                                                 <ItemsControl.ItemTemplate>
                                                     <DataTemplate>
-                                                        <TextBlock Margin="0,1">
+                                                        <TextBlock Margin="0,1" FontSize="12">
                                                             <Run Text="{Binding Product.Name}"/>
                                                             <Run Text=" × "/>
                                                             <Run Text="{Binding Quantity}"/>
-                                                            <Run Text=" = "/>
-                                                            <Run Text="{Binding Subtotal, StringFormat=N0, Mode=OneWay}"/>
-                                                            <Run Text=" грн"/>
                                                         </TextBlock>
                                                     </DataTemplate>
                                                 </ItemsControl.ItemTemplate>
                                             </ItemsControl>
+                                        </DataTemplate>
+                                    </DataGridTemplateColumn.CellTemplate>
+                                </DataGridTemplateColumn>
+                                <DataGridTemplateColumn Header="Чек" Width="90">
+                                    <DataGridTemplateColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <Button Content="🧾 Чек" Tag="{Binding}"
+                                                    Click="ViewReceipt_Click"
+                                                    Style="{StaticResource SecondaryButton}"
+                                                    Padding="8,4" FontSize="12"/>
                                         </DataTemplate>
                                     </DataGridTemplateColumn.CellTemplate>
                                 </DataGridTemplateColumn>

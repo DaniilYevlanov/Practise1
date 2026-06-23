@@ -1,8 +1,6 @@
 namespace MagazinWPF.Models
 {
-    /// <summary>
-    /// Один рядок кошика — товар та його кількість.
-    /// </summary>
+
     public class CartItem
     {
         public int Id { get; set; }
@@ -19,9 +17,7 @@ namespace MagazinWPF.Models
 
         public decimal UnitPrice { get; set; }
 
-        /// <summary>
-        /// Сума за цим рядком (кількість * ціна за одиницю).
-        /// </summary>
+ 
         public decimal TotalPrice => Quantity * UnitPrice;
     }
 }
