@@ -64,8 +64,9 @@
                                 <DataTemplate>
                                     <Border Width="220" Style="{StaticResource ItemCardStyle}">
                                         <StackPanel>
-                                            <Border Height="110" Background="#F1F3F5" CornerRadius="10" Margin="0,0,0,10">
-                                                <TextBlock Text="📦" FontSize="32" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                            <Border Height="100" Background="#F1F3F5" CornerRadius="10">
+                                                <Image Source="{Binding ImagePath}"
+                                                         Stretch="UniformToFill"/>
                                             </Border>
                                             <TextBlock Text="{Binding Name}" FontWeight="SemiBold" FontSize="14"
                                                        TextWrapping="Wrap" Margin="0,0,0,4"/>

@@ -106,8 +106,9 @@
                                                     BorderBrush="{StaticResource BorderBrush}" BorderThickness="1"
                                                     Padding="12" Margin="0,0,12,12">
                                                 <StackPanel>
-                                                    <Border Height="100" Background="#F1F3F5" CornerRadius="10" Margin="0,0,0,10">
-                                                        <TextBlock Text="📦" FontSize="32" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                                    <Border Width="200" Height="200" Background="#F1F3F5" CornerRadius="10" Margin="0,0,0,10">
+                                                        <Image Source="{Binding ImagePath}"
+                                                               Stretch="Fill"/>
                                                     </Border>
                                                     <TextBlock Text="{Binding Name}" FontWeight="SemiBold" FontSize="13"
                                                                TextWrapping="Wrap" Margin="0,0,0,6" MinHeight="36"/>
